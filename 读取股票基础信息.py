@@ -14,7 +14,8 @@ def getHtml(url):
         r = requests.get(url)
 #    r = requests.get(url,headers=headers)
         r.raise_for_status
-        r.apparent_encoding 
+#这里也可以提前获取目标编码，提高运行速度
+        r.endoding = r.apparent_encoding
         html = r.text
         return html
     except:
@@ -32,6 +33,8 @@ def getName(url):
 
 #处理页面源码，获得指定信息并存入键值对中
 def getData(html):
+    #进度计数变量
+    count = 0
     soup = BeautifulSoup(html,"html.parser")
     name = ""
     price = 0;
@@ -42,6 +45,9 @@ def getData(html):
     data = {'name':'','price':0}
     data['name']=name[0].split(':')[1]
     data['price']=price[0].split(':')[1]
+    #动态显示进度
+    count = count+1
+    print('\r进度:{:.2f}%'.format(count*100/len(name)),end='')
     return data
 
 
