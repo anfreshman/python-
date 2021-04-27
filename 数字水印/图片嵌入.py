@@ -17,11 +17,12 @@ def my_nearest_resize(big_img, small_img):
     #得到大图像上相对于小图像的点
     stepx = big_w/small_w
     stepy = big_h/small_h
-    #
+    #1920与1080的图像需要位移0.5*stepx，如果为3的奇数倍，需要减一
     for i in range(0, small_w):
         for j in range(0, small_h):
             map_x = int( i*stepx + stepx*0.5 )
             map_y = int( j*stepy + stepy*0.5 )
+            #进行像素替换
             if map_x < big_w and map_y < big_h :
                 dst_im.putpixel( (map_x, map_y), small_img.getpixel( (i, j) ) )
 
