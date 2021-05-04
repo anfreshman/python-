@@ -78,16 +78,22 @@ class Engine:
         self.size = size
         self.population = population
 
-    def create(self):
+    def create(self,population = None):
+        # 如果输入了population，将其赋值给self.population
+        if population:
+            self.population = population
         self.persons = []
         for i in range(self.population):
             self.persons.append(Person(self))
 
-    def next_fream(self):
+    def next_fream(self,move_range=None):
         """假定每个人都有一个出生地(person的第一次随机得到的点)，每一次运动都有一个目标点，
             以匀速向目标点前进，到达目标点后更换目标点，可以看出，向目标点的移动是一个简单的
             向量加减法的问题，目标点需要在出生点的范围之内"""
         for person in self.persons:
+            # 如果前端传入了人群的移动范围，则更新每个人的移动范围
+            if move_range:
+               person.move_range = move_range
             person.move()
             # 患者尝试感染其他人
             if person.status == "I":
