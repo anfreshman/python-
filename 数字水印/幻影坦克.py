@@ -8,15 +8,21 @@ blackimage=Image.open("2顶.png").convert("L")
 # new类，第一个参数传入mode图像类型，第二个参数传入一个元组表示图像大小
 imgTank = Image.new("RGBA",(whiteimage.width,whiteimage.height))
 pixel=[]
+testp=[]
+testa=[]
+outPa=[]
+outPb=[]
 # 计算合成每个像素点的透明度
 for wid in range(1,whiteimage.width):
     for high in range(1,whiteimage.height):
         pA = whiteimage.getpixel((wid,high))
+        outPa.append(pA)
         pB = blackimage.getpixel((wid,high))
+        outPb.append(pB)
         alpha = 255 - (pA - pB)
         gray = int(255*pB/alpha)
         imgTank.putpixel((wid,high),(gray,gray,gray,alpha))
         pixel.append(gray)
-        pixel.append(alpha)
+        # pixel.append(alpha)
 print(pixel)
 imgTank.save("幻影坦克.png")
