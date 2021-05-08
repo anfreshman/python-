@@ -22,6 +22,8 @@ class Interface:
         self.strvars = {}
         # 创建画布
         self.create_widget()
+        # 初始化移动人数
+        self.move_range=None
 
 
     def create_widget(self):
@@ -63,10 +65,10 @@ class Interface:
         for person in self.engine.persons:
             self.canvas.create_rectangle(person.x-2,person.y-2,person.x+2,person.y+2,fill=color[person.status],outline=color[person.status])
 
-    def next_frame(self,move_range=None):
+    def next_frame(self):
         """确定下一帧动画中动点的位置"""
         # 更新person的位置
-        self.engine.next_fream(move_range)
+        self.engine.next_fream(self.move_range)
         # 擦除上一次遗留下来的点
         self.canvas.delete("all")
         # 画出当前时间段所有人
@@ -89,7 +91,9 @@ class Interface:
         # 将用户输入的人群值赋值给population，并重载create函数，使得两种模式都可以用
         self.engine.create(population)
         self.engine.infect(10)
-        self.next_frame(int(self.strvars["活动范围"].get()))
+        self.move_range=int(self.strvars["活动范围"].get())
+        # 这里不可以添加next_frame()，否则两个单独的next_frame()同时执行，会导致帧数滑动过快
+        # self.next_frame(int(self.strvars["活动范围"].get()))
 
 # 当直接运行的时候会调用，import则不会运行
 if __name__ == "__main__":
