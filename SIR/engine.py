@@ -24,7 +24,7 @@ class Person:
         # 每一个人都有一个当前移动的目标点，到达之后即更换，设置初始目标点为home
         self.move_target = self.home.copy()
         # 活动范围(四方)
-        self.move_range = MOVE_RANGE
+        self.move_range = engine.move_range
         # 移动速度
         self.move_speed = MOVE_SPEED
         # 患病情况，默认为健康人
@@ -78,22 +78,21 @@ class Engine:
         self.size = size
         self.population = population
 
-    def create(self,population = None):
-        # 如果输入了population，将其赋值给self.population
-        if population:
-            self.population = population
-        self.persons = []
-        for i in range(self.population):
-            self.persons.append(Person(self))
+    def create(self,user_input):
+        # 将user_input中的值分门别类的送入self中的属性
+        # setattr是Python的语法糖，作用是给类中的属性赋值，这样写可以方便使得数值逻辑分离
+        for key,val in user_input.items():
+            # 这里赋值了population与move_range，赋值在了engine的属性中
+            setattr(self,key,val)
+            print(val)
+        self.persons = [Person(self) for _ in range(self.population)]
 
-    def next_fream(self,move_range=None):
+
+    def next_fream(self):
         """假定每个人都有一个出生地(person的第一次随机得到的点)，每一次运动都有一个目标点，
             以匀速向目标点前进，到达目标点后更换目标点，可以看出，向目标点的移动是一个简单的
             向量加减法的问题，目标点需要在出生点的范围之内"""
         for person in self.persons:
-            # 如果前端传入了人群的移动范围，则更新每个人的移动范围
-            if move_range:
-               person.move_range = move_range
             person.move()
             # 患者尝试感染其他人
             if person.status == "I":

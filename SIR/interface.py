@@ -15,15 +15,13 @@ class Interface:
         self.engine = Engine(CANVAS_SIZE,POPULATION)
         # 编写用户可输入选项，数据与逻辑相分离
         self.user_input = {
-            "人群数量":500,
-            "活动范围":50
+            "population":500,
+            "move_range":50
         }
         # 将strvar定义为空字典，方便循环
         self.strvars = {}
         # 创建画布
         self.create_widget()
-        # 初始化移动人数
-        self.move_range=None
 
 
     def create_widget(self):
@@ -68,7 +66,7 @@ class Interface:
     def next_frame(self):
         """确定下一帧动画中动点的位置"""
         # 更新person的位置
-        self.engine.next_fream(self.move_range)
+        self.engine.next_fream()
         # 擦除上一次遗留下来的点
         self.canvas.delete("all")
         # 画出当前时间段所有人
@@ -78,7 +76,7 @@ class Interface:
 
     def start(self):
         # 使用引擎创建人
-        self.engine.create()
+        self.engine.create(self.user_input)
         # 在人群中插入一批感染者
         self.engine.infect(10)
         self.root.after(30, self.next_frame)
@@ -86,12 +84,15 @@ class Interface:
         self.root.mainloop()
 
     def restart(self):
-        # 用strvar获取用户输入
-        population = int(self.strvars["人群数量"].get())
-        # 将用户输入的人群值赋值给population，并重载create函数，使得两种模式都可以用
-        self.engine.create(population)
+        # 用strvar获取用户输入，这里直接使用int()进行强制类型转换会导致无法使用其他的数值类型
+        # 例如小数，所以我们可以先使用type内置函数获得本身应有的type，得到typeobject
+        for key in self.user_input:
+            print(self.user_input[key])
+            val_type = type(self.user_input[key])
+            self.user_input[key] = val_type(self.strvars[key].get())
+        # 将用户输入输入进create，并重载create函数，使得两种模式都可以用
+        self.engine.create(self.user_input)
         self.engine.infect(10)
-        self.move_range=int(self.strvars["活动范围"].get())
         # 这里不可以添加next_frame()，否则两个单独的next_frame()同时执行，会导致帧数滑动过快
         # self.next_frame(int(self.strvars["活动范围"].get()))
 
