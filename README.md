@@ -7,8 +7,7 @@
 ## SIR可视化数学模型 
 已部分完成 
 使用方法：download SIR文件夹后，进入文件夹，执行 python interface.py 
-[interface]:https://github.com/anfreshman/python-/blob/main/SIR/SIR_Interface.JPG 
-效果如图所示![interface] 
+效果如图所示![interface](https://github.com/anfreshman/python-/blob/main/SIR/SIR_Interface.JPG) 
 ### 参数含义  
 	其中的population参数表示人群数量
 	其中的move_range参数表示每个人的活动范围
